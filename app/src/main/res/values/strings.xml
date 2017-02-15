@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Taco Pronto</string>
+    <string name="size_button">Size</string>
+    <string name="tortilla_button">Tortilla</string>
+</resources>
