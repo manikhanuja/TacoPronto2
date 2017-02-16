@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">Taco Pronto</string>
-    <string name="size_button">Size</string>
-    <string name="tortilla_button">Tortilla</string>
+    <string name="size_textView">Size</string>
+    <string name="tortilla_textView">Tortilla</string>
+    <string name="large_radio">Large</string>
+    <string name="medium_radio">Medium</string>
+    <string name="corn_radio">Corn</string>
+    <string name="flour_radio">Flour</string>
+    <string name="fillings_textView">Fillings</string>
+    <string name="beverage_textView">Beverage</string>
+    <string name="placeOrder_button">Place Your Order</string>
+
 </resources>
