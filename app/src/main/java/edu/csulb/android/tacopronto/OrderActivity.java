@@ -156,7 +156,7 @@ public class OrderActivity extends Activity {
                     String stackTraceError = e.getStackTrace().toString();
                 }
                 TextView message_textView = (TextView) findViewById(R.id.msg_textView);
-                message_textView.setText("Price for fillings: " + orderCost);
+                message_textView.setText("Price for Total Order: " + orderCost);
                 SmsManager smsManager = SmsManager.getDefault();
                 smsManager.sendTextMessage("5556", null,
                         getString(R.string.textMessage) + orderCost + getString(R.string.currencyUnit) , null, null);
