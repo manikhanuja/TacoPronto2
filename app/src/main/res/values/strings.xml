@@ -9,5 +9,7 @@
     <string name="fillings_textView">Fillings</string>
     <string name="beverage_textView">Beverage</string>
     <string name="placeOrder_button">Place Your Order</string>
+    <string name="textMessage">Congratulations! Your Order for Big Taco is successfully placed. Total Price: </string>
+    <string name="currencyUnit">$</string>
 
 </resources>

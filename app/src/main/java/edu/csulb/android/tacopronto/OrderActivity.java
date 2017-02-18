@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.telephony.SmsManager;
 
 import java.util.ArrayList;
 
@@ -29,6 +30,7 @@ public class OrderActivity extends Activity {
     GridView gridView_beverage;
 
     RadioGroup size_group, tortilla_group;
+    RadioButton large_radio, medium_radio;
     Button submit_Button;
     float orderCost= (float) 0.0;
 
@@ -43,6 +45,9 @@ public class OrderActivity extends Activity {
         size_group = (RadioGroup)findViewById(R.id.size_radioGroup);
         tortilla_group =(RadioGroup)findViewById(R.id.flour_radiogroup);
         submit_Button = (Button)findViewById(R.id.placeOrder_button);
+        large_radio = (RadioButton) findViewById(R.id.large_radio);
+        medium_radio = (RadioButton) findViewById(R.id.medium_radio);
+
 
         //Add Fillings
         gridArray_fillings.add("Beef");
@@ -108,35 +113,55 @@ public class OrderActivity extends Activity {
        submit_Button.setOnClickListener(new View.OnClickListener() {
             @Override
            public void onClick(View v) {
-               String size_selection = ((RadioButton) findViewById(size_group.getCheckedRadioButtonId())).getText().toString();
-                String tortilla_selection = ((RadioButton) findViewById(tortilla_group.getCheckedRadioButtonId())).getText().toString();
-                orderCost = orderCost + sharedPreferences.getFloat(size_selection,(float)0.0)+ sharedPreferences.getFloat(tortilla_selection,(float)0.0);
-                SparseBooleanArray sparseBool_fillings = gridView_fillings.getCheckedItemPositions();
+                String size_selection = null;
+                String tortilla_selection = null;
+                try {
+                    if(size_group.getCheckedRadioButtonId() != -1) {
+                         size_selection = ((RadioButton) findViewById(size_group.getCheckedRadioButtonId())).getText().toString();
+                    }
+                    if(tortilla_group.getCheckedRadioButtonId() != -1){
+                         tortilla_selection = ((RadioButton) findViewById(tortilla_group.getCheckedRadioButtonId())).getText().toString();
 
-                for (int fill_index=0;fill_index<gridView_fillings.getCount();fill_index++
-                        ) {
-                    if(sparseBool_fillings.get(fill_index)) {
-
-                        float price = sharedPreferences.getFloat(gridArray_fillings.get(fill_index),(float)0.0);
-                        orderCost = orderCost+price;
                     }
 
-                }
+                        orderCost = orderCost + sharedPreferences.getFloat(size_selection, (float) 0.0);
+                        orderCost = orderCost + sharedPreferences.getFloat(tortilla_selection, (float) 0.0);
 
-                SparseBooleanArray sparseBool_beverage = gridView_beverage.getCheckedItemPositions();
+                    SparseBooleanArray sparseBool_fillings = gridView_fillings.getCheckedItemPositions();
 
-                for (int bev_index=0;bev_index<gridView_beverage.getCount();bev_index++
-                        ) {
-                    if(sparseBool_beverage.get(bev_index)) {
+                    for (int fill_index = 0; fill_index < gridView_fillings.getCount(); fill_index++
+                            ) {
+                        if (sparseBool_fillings.get(fill_index)) {
 
-                        float price = sharedPreferences.getFloat(gridArray_beverage.get(bev_index),(float)0.0);
-                        orderCost = orderCost+price;
+                            float price = sharedPreferences.getFloat(gridArray_fillings.get(fill_index), (float) 0.0);
+                            orderCost = orderCost + price;
+                        }
+
                     }
 
-                }
+                    SparseBooleanArray sparseBool_beverage = gridView_beverage.getCheckedItemPositions();
 
+                    for (int bev_index = 0; bev_index < gridView_beverage.getCount(); bev_index++
+                            ) {
+                        if (sparseBool_beverage.get(bev_index)) {
+
+                            float price = sharedPreferences.getFloat(gridArray_beverage.get(bev_index), (float) 0.0);
+                            orderCost = orderCost + price;
+                        }
+
+                    }
+                }
+                catch (Exception e){
+                    String errorMessage = e.getMessage();
+                    String stackTraceError = e.getStackTrace().toString();
+                }
                 TextView message_textView = (TextView) findViewById(R.id.msg_textView);
                 message_textView.setText("Price for fillings: " + orderCost);
+                SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage("5556", null,
+                        getString(R.string.textMessage) + orderCost + getString(R.string.currencyUnit) , null, null);
+
+                //Reset the orderCost Value
                 orderCost = (float) 0.0;
 
             }
